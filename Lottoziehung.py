@@ -1,24 +1,42 @@
 import random
 
-def Lottoziehung(wiederholungen):
-    Ziehungen = {}
-    for x in range(1, wiederholungen + 1):
-        Ziehungen[x] = random.randint(1, 45)
-    print(Ziehungen)
-
-def LottoziehungOhneDoppelt(wiederholungen):
-    Ziehungen = {}
-    zusaetzlich = 0 
-    for x in range(1, wiederholungen + 1):
-        Randnum = random.randint(1, 45)
-        for y in Ziehungen:
-            if Ziehungen[y] == Randnum:
-                Randnum = 50
-                zusaetzlich + 1
-        if Randnum != 50:
-            Ziehungen[x] = Randnum
+def Lottoziehung():
+    ziehungen = []
+    #test = []
+    for x in range(1, 46):
+        ziehungen.append(x)
+    for x in range(0, 6):
+        index = random.randrange(len(ziehungen) - x)
+        rand = ziehungen[index]
+        ziehungen[len(ziehungen) - 1 - x] = rand
+        ziehungen[index] = len(ziehungen) - x
     
-
-    print(Ziehungen)
+    #for x in range(39,45):
+        #test.append(x)
     
-LottoziehungOhneDoppelt(45)
+    #print(test)
+    #print(ziehungen[39:45])
+
+    return ziehungen[39:45]
+
+stat = {}
+
+def Statistik(ziehungen):
+    for b in range(0,5):
+        value = ziehungen[b]
+        count = stat[value] 
+        #print(count)
+        stat[value] = count + 1
+    #print(stat)
+    
+    
+def aufrufen(wieoft):
+    for x in range(1, 46):
+        stat[x] = 0
+    for wieoft in range(0, wieoft):
+        Statistik(Lottoziehung())
+    print(stat)
+
+if __name__ == '__main__':
+    aufrufen(1000)
+
