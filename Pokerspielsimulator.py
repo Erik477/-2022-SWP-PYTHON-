@@ -6,7 +6,10 @@
 
 # Wahrscheinlichkeiten für Kombinationen nach 1000 Versuchen Ausgeben
 
-#https://www.partypoker.com/de-at/how-to-play/hand-rankings
+#https://de.wikipedia.org/wiki/Poker
+
+
+#TODO: Bei 7 Karten Funktioniert die Straße nicht so wie sie sollte
 
 import random
 
@@ -28,7 +31,7 @@ def Kombinationen(Karten,assistheworst):
         kombination = "Flush" 
         if StraightFlush(Karten,assistheworst):           #Straight Flush     (aufeinanderfolgend)
             kombination = "Straight Flush" 
-            if RoyalFlush(Karten,assistheworst):          #Royal Flush        (endet mit Ass)
+            if RoyalFlush(Karten):          #Royal Flush        (endet mit Ass)
                 kombination = "Royal Flush" 
     else:
         ident = Gleiche(Karten)             #Gleiche geht die Karten durch und zählt wie viele gleich sind (22 sind 2 Paare)
@@ -71,7 +74,7 @@ def Flush(Karten):
         elif nr == 3:
             Kreuz += 1
 
-    if Herz == len(Karten) or Karo == len(Karten) or Pik == len(Karten) or Kreuz == len(Karten):
+    if Herz == 5 or Karo == 5 or Pik == 5 or Kreuz == 5:
         return True
     else:
         return False
@@ -84,20 +87,32 @@ def StraightFlush(Karten,assistheworst):
                 Karten[x][1] = 14
         Numbers.append(Karten[x][1])
     Numbers.sort()
-    if (Numbers[len(Numbers)-1] - Numbers[0]) == (len(Numbers) - 1):
-        return True
-    else:
-        return False
+    if len(Numbers) == 5:
+        if (Numbers[len(Numbers)-1] - Numbers[0]) == (len(Numbers) - 1):
+            return True
+        else:
+            return False
+    elif len(Numbers) > 5:
+        count = 0
+        oldvar = 15
+
+        for x in range(len(Numbers)):
+            if Numbers[x] == oldvar + 1:
+                count += 1
+                oldvar = Numbers[x]
+            else:
+                count = 0
+                oldvar = Numbers[x]
+            if count == 5:
+                Karten.append([x,0])
+                return True
+
+        return False 
+    return False     
     
-def RoyalFlush(Karten,assistheworst):
-    Numbers = []
-    for x in range(len(Karten)):
-        if assistheworst == False:
-            if Karten[x][1] == 1:
-                Karten[x][1] = 14
-        Numbers.append(Karten[x][1])
-    Numbers.sort()
-    if Numbers[len(Numbers)-1] == 14:
+def RoyalFlush(Karten):
+
+    if Karten[Karten[len(Karten)-1][0]][1] == 14:
         return True
     else:
         return False
@@ -227,16 +242,15 @@ def Statistik(wieoft,anzKarten,assistheworst,anzKartenimdeck):
         elif x == 7: print("Vierling: " + str(percent) + "%")
         elif x == 3: print("Straight Flush: " + str(percent) + "%")
         elif x == 4: print("Royal Flush: " + str(percent) + "%")        
-        elif x == 9: print("mehr als 2 Paare: " + str(percent) + "%")
-        elif x == 11: print("Vierling und ein Zwilling: " + str(percent) + "%")
-        elif x == 12: print("mehr als 4 Gleiche: " + str(percent) + "%")
-        
+        #elif x == 9: print("mehr als 2 Paare: " + str(percent) + "%")
+        #elif x == 11: print("Vierling und ein Zwilling: " + str(percent) + "%")
+        #elif x == 12: print("mehr als 4 Gleiche: " + str(percent) + "%")    
 
 if __name__ == '__main__':
     stat = {}
 
     assistheworst  = False
-    anzKarten = 5
+    anzKarten = 7
     wieoft = 100000
     anzKartenimdeck = 52
     Statistik(wieoft,anzKarten,assistheworst,anzKartenimdeck)
