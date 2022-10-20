@@ -25,11 +25,11 @@ def Kartenziehung(anzZiehungen,anzKarten):
 
     return ziehungen[-anzZiehungen:]
     
-def Kombinationen(Karten,assistheworst):
+def Kombinationen(Karten,aceistheworst):
     kombination = "nix"
     if Flush(Karten):                       #Flush      (Alle gleiche Farbe)
         kombination = "Flush" 
-        if StraightFlush(Karten,assistheworst):           #Straight Flush     (aufeinanderfolgend)
+        if StraightFlush(Karten,aceistheworst):           #Straight Flush     (aufeinanderfolgend)
             kombination = "Straight Flush" 
             if RoyalFlush(Karten):          #Royal Flush        (endet mit Ass)
                 kombination = "Royal Flush" 
@@ -51,7 +51,7 @@ def Kombinationen(Karten,assistheworst):
             kombination = "vierling und ein zwilling"
         elif ident == 5:
             kombination = "mehr als 4 Gleiche"
-        elif StraightFlush(Karten,assistheworst):         #Straße         
+        elif StraightFlush(Karten,aceistheworst):         #Straße         
             kombination = "Straße" 
 
     return(kombination)
@@ -79,10 +79,10 @@ def Flush(Karten):
     else:
         return False
 
-def StraightFlush(Karten,assistheworst):
+def StraightFlush(Karten,aceistheworst):
     Numbers = []
     for x in range(len(Karten)):
-        if assistheworst == False:
+        if aceistheworst == False:
             if Karten[x][1] == 1:
                 Karten[x][1] = 14
         Numbers.append(Karten[x][1])
@@ -163,7 +163,7 @@ def Farbe(nr):
 def Zahl(nr):
 
     if nr == 1:
-        if assistheworst:
+        if aceistheworst:
             number = "Ass"
     elif nr <= 10 and nr > 1:
         number = str(nr)
@@ -174,7 +174,7 @@ def Zahl(nr):
     elif nr == 13:
         number = "König"
     elif nr == 14:
-        if assistheworst == False:
+        if aceistheworst == False:
             number = "Ass"
     else:
         number = "Falsche Eingabe"
@@ -182,7 +182,7 @@ def Zahl(nr):
 
     return number   
 
-def Aufrufen(anzZiehungen,assistheworst,anzKartenimdeck):
+def Aufrufen(anzZiehungen,aceistheworst,anzKartenimdeck):
     Ziehung = Kartenziehung(anzZiehungen,anzKartenimdeck)
     Karten = []
     Karte = []
@@ -193,7 +193,7 @@ def Aufrufen(anzZiehungen,assistheworst,anzKartenimdeck):
         Karten.append(Karte)
         Karte = []
 
-    erg = Kombinationen(Karten,assistheworst)
+    erg = Kombinationen(Karten,aceistheworst)
 
     #print("Ziehung: " + str(Ziehung))
     #print("Karte1: " + Farbe(Karten[0][0]) + " " + Zahl(Karten[0][1]))
@@ -205,14 +205,14 @@ def Aufrufen(anzZiehungen,assistheworst,anzKartenimdeck):
 
     return erg
 
-def Statistik(wieoft,anzKarten,assistheworst,anzKartenimdeck):
+def Statistik(wieoft,anzKarten,aceistheworst,anzKartenimdeck):
 
     ErgList = [0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
     for wieoft in range(0, wieoft):
         
         ErgList[0] += 1
-        Ergebnis = Aufrufen(anzKarten,assistheworst,anzKartenimdeck)
+        Ergebnis = Aufrufen(anzKarten,aceistheworst,anzKartenimdeck)
         if Ergebnis == "nix":ErgList[1] += 1
         elif Ergebnis == "Flush": ErgList[2] += 1
         elif Ergebnis == "Straight Flush": ErgList[3] += 1
@@ -249,9 +249,9 @@ def Statistik(wieoft,anzKarten,assistheworst,anzKartenimdeck):
 if __name__ == '__main__':
     stat = {}
 
-    assistheworst  = False
+    aceistheworst  = False
     anzKarten = 7
     wieoft = 100000
     anzKartenimdeck = 52
-    Statistik(wieoft,anzKarten,assistheworst,anzKartenimdeck)
+    Statistik(wieoft,anzKarten,aceistheworst,anzKartenimdeck)
 
