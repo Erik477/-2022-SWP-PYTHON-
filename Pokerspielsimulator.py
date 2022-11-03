@@ -27,9 +27,9 @@ def Kartenziehung(anzZiehungen,anzKarten):
     
 def Kombinationen(Karten,aceistheworst):
     kombination = "nix"
-    if Flush(Karten):                       #Flush      (Alle gleiche Farbe)
+    if Flush(Karten):                       #Flush          (Alle gleiche Farbe)
         kombination = "Flush" 
-        if StraightFlush(Karten,aceistheworst):           #Straight Flush     (aufeinanderfolgend)
+        if StraightFlush(Karten,aceistheworst): #Straight Flush     (aufeinanderfolgend)
             kombination = "Straight Flush" 
             if RoyalFlush(Karten):          #Royal Flush        (endet mit Ass)
                 kombination = "Royal Flush" 
@@ -74,7 +74,7 @@ def Flush(Karten):
         elif nr == 3:
             Kreuz += 1
 
-    if Herz == 5 or Karo == 5 or Pik == 5 or Kreuz == 5:
+    if Herz >= 5 or Karo >= 5 or Pik >= 5 or Kreuz >= 5:
         return True
     else:
         return False
@@ -192,6 +192,7 @@ def Aufrufen(anzZiehungen,aceistheworst,anzKartenimdeck):
         Karte.append(Ziehung[x]//4)
         Karten.append(Karte)
         Karte = []
+    
 
     erg = Kombinationen(Karten,aceistheworst)
 
