@@ -32,7 +32,7 @@ def Kombinationen(Karten,aceistheworst):
             kombination = "2 Paare"
         elif ident == 5:                   #Full House     (ein Paar ein Drilling)
             kombination = "Full House"
-        if StraightFlush(Karten,aceistheworst): #Straße         
+        if StraightFlush(Karten,aceistheworst) and Gleiche(Karten) < 2: #Straße         
             kombination = "Straße" 
 
     return(kombination)
@@ -187,9 +187,9 @@ def Statistik(wieoft,anzKarten,aceistheworst,anzKartenimdeck):
         elif Ergebnis == "Drilling": ErgList[6] += 1
         elif Ergebnis == "Vierling": ErgList[7] += 1
         elif Ergebnis == "2 Paare": ErgList[8] += 1
-        elif Ergebnis == "mehr als 2 Paare": ErgList[9] += 1
+        #elif Ergebnis == "mehr als 2 Paare": ErgList[9] += 1
         elif Ergebnis == "Full House":ErgList[10] += 1
-        elif Ergebnis == "vierling und ein zwilling": ErgList[11] += 1
+        #elif Ergebnis == "vierling und ein zwilling": ErgList[11] += 1
         elif Ergebnis == "Straße": ErgList[13] += 1            
 
     print("------------------------------------------------------")
