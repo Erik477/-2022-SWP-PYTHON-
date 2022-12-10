@@ -155,7 +155,8 @@ if __name__ == '__main__':
     app = Flask(__name__)
     @app.route('/statistic')
     def statistic():
-        return jsonify(playerstats, compstats)
+        
+        return jsonify({"playerstats": playerstats, "compstats": compstats})
     app.run()
 
     print("Willkommen bei Schere Stein Papier Echse Spock")
