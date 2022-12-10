@@ -7,6 +7,7 @@ def Lottoziehung(anzZiehungen,maxZahl):
         ziehungen.append(x)
     for x in range(0, anzZiehungen):
         index = random.randrange(len(ziehungen) - x)
+
         rand = ziehungen[index]
         last_pos = len(ziehungen) -1 - x
         ziehungen[last_pos],ziehungen[index]=ziehungen[index],ziehungen[last_pos]
