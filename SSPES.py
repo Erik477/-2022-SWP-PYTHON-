@@ -1,6 +1,6 @@
 import random
 import json
-
+from flask import Flask, jsonify
 
 def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
     print("Welcome to Schere Stein Papier Echse Spock")
@@ -152,6 +152,12 @@ if __name__ == '__main__':
     symbols_player = [playerstats["Schere"],playerstats["Stein"],playerstats["Papier"],playerstats["Echse"],playerstats["Spock"]]
     symbols_comp = [compstats["Schere"],compstats["Stein"],compstats["Papier"],compstats["Echse"],compstats["Spock"]]
 
+    app = Flask(__name__)
+    @app.route('/statistic')
+    def statistic():
+        return jsonify(playerstats, compstats)
+    app.run()
+
     print("Willkommen bei Schere Stein Papier Echse Spock")
     print("1. Spiel starten")
     print("2. Statistik")
@@ -168,3 +174,4 @@ if __name__ == '__main__':
         print("Auf Wiedersehen")
         exit()
     else: print("Falsche Eingabe")
+
