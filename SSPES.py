@@ -66,7 +66,7 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
         print("Auf Wiedersehen")
     else: print("Falsche Eingabe")
 
-def statistic( Countplayerwins, Countcompwins, symbols_player, symbols_comp):
+def statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp):
     timesplayed = Countplayerwins + Countcompwins
     print("Gespielt: " + str(timesplayed))
     print("Spieler:  " + str(Countplayerwins) + " Percent: " + str((Countplayerwins/timesplayed)*100)+ "%")
@@ -157,22 +157,26 @@ if __name__ == '__main__':
     def statistic():
         
         return jsonify({"playerstats": playerstats, "compstats": compstats})
-    app.run()
-
+    
     print("Willkommen bei Schere Stein Papier Echse Spock")
     print("1. Spiel starten")
-    print("2. Statistik")
+    print("2. Statistik + API")
     print("3. Daten ändern")
     print("4. Beenden")
     choice = str(input())
     if choice == "1":
         aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp)
     elif choice == "2":
-        statistic( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
+        statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
+        app.run()
     elif choice == "3":
         uploaddata(Countplayerwins,Countcompwins,symbols_player,symbols_comp)
     elif choice == "4":
         print("Auf Wiedersehen")
         exit()
     else: print("Falsche Eingabe")
+
+    
+
+    
 
