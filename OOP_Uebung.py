@@ -11,6 +11,7 @@ class Department(Enum):
 class gender(Enum):
     MALE = 0
     FEMALE = 1
+    OTHER = 2
 
 
 class Person(object):
@@ -64,7 +65,8 @@ class Company:
     def get_gender_ration(self):
         counter = {
             gender.MALE: 0,
-            gender.FEMALE: 0
+            gender.FEMALE: 0,
+            gender.OTHER: 0
         }
         for employee in self.employees:
             counter[employee.gender] += 1 / len(self.employees)
@@ -73,9 +75,9 @@ class Company:
 
 if __name__ == '__main__':
     company = Company([
-        Employee("Julian", "Schmid", gender.MALE, Department.UNDEFINED),
-        HeadOfGroup("Lucas", "Schebor", gender.MALE, Department.MARKETING),
-        HeadOfGroup("Michael", "Zechner", gender.MALE, Department.MARKETING)
+        HeadOfGroup("Julian", "Schmid", gender.MALE, Department.PRODUCTION),
+        Employee("Lucas", "Schebor", gender.FEMALE, Department.MARKETING),
+        HeadOfGroup("Michael", "Zechner", gender.OTHER, Department.MARKETING)
     ])
     print(company.count_employees_via_type(Employee))
     print(company.count_employees_via_type(HeadOfGroup))

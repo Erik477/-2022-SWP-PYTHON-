@@ -2,10 +2,12 @@ import random
 import json
 from flask import Flask, jsonify
 
-def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
-    print("Welcome to Schere Stein Papier Echse Spock")
-    print("Schwierigkeit: 1 = leicht, 2 = schwer")
-    difficulty = str(input())
+def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty):
+    
+    if difficulty == 3:
+        print("Welcome to Schere Stein Papier Echse Spock")
+        print("Schwierigkeit: 1 = leicht, 2 = schwer")
+        difficulty = str(input())
 
 
     print("Schere = 0, Stein = 1, Papier = 2, Echse = 3, Spock = 4")
@@ -24,7 +26,7 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
             comp = "2"
         elif comp == "4" and symbols_player[3] > symbols_player[0]:
             comp = "3"
-    else: print("Falsche Eingabe bei Schwireigkeit")
+    else: print("Falsche Eingabe bei Schwierigkeit")
     player = str(input())
 
     symbols_player[int(player)] += 1
@@ -52,7 +54,7 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
 
     again = str(input("Nochmal? (y/n)"))
 
-    if again == "y": aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp)
+    if again == "y": aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty)
     elif again == "n":
         
         playerstats = {"Schere": symbols_player[0], "Stein": symbols_player[1], "Papier": symbols_player[2], "Echse": symbols_player[3], "Spock": symbols_player[4], "Gewonnen": Countplayerwins}
@@ -156,7 +158,7 @@ if __name__ == '__main__':
     @app.route('/statistic')
     def statistic():
         
-        return jsonify({"playerstats": playerstats, "compstats": compstats})
+        return jsonify({"Player: ": playerstats, "Computer: ": compstats})
     
     print("Willkommen bei Schere Stein Papier Echse Spock")
     print("1. Spiel starten")
@@ -165,7 +167,8 @@ if __name__ == '__main__':
     print("4. Beenden")
     choice = str(input())
     if choice == "1":
-        aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp)
+        aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,3)
+        statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
     elif choice == "2":
         statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
         app.run()
@@ -175,8 +178,3 @@ if __name__ == '__main__':
         print("Auf Wiedersehen")
         exit()
     else: print("Falsche Eingabe")
-
-    
-
-    
-
