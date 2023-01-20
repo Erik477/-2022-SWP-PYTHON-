@@ -1,11 +1,13 @@
 import random
 import json
-from flask import Flask, jsonify
+import mysql.connector
 
-def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty):
+def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty,username):
     
     if difficulty == 3:
         print("Welcome to Schere Stein Papier Echse Spock")
+        if username == "defaultuser":
+            username = str(input("Username: "))
         print("Schwierigkeit: 1 = leicht, 2 = schwer")
         difficulty = str(input())
 
@@ -27,10 +29,13 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficult
         elif comp == "4" and symbols_player[3] > symbols_player[0]:
             comp = "3"
     else: print("Falsche Eingabe bei Schwierigkeit")
+
     player = str(input())
 
-    symbols_player[int(player)] += 1
-    symbols_comp[int(comp)] += 1
+    if int(player) <= 4:
+        symbols_player[int(player)] += 1
+        symbols_comp[int(comp)] += 1
+    
 
     print("Computer: " + str(comp))
 
@@ -54,127 +59,151 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficult
 
     again = str(input("Nochmal? (y/n)"))
 
-    if again == "y": aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty)
+    if again == "y": aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty,username)
     elif again == "n":
-        
-        playerstats = {"Schere": symbols_player[0], "Stein": symbols_player[1], "Papier": symbols_player[2], "Echse": symbols_player[3], "Spock": symbols_player[4], "Gewonnen": Countplayerwins}
-        compstats = {"Schere": symbols_comp[0], "Stein": symbols_comp[1], "Papier": symbols_comp[2], "Echse": symbols_comp[3], "Spock": symbols_comp[4], "Gewonnen": Countcompwins}
 
-        with open('playerstats.json', 'w') as f:
-            json.dump(playerstats, f)
-        with open('compstats.json', 'w') as f:
-            json.dump(compstats, f)
+        safeDatatoMysql(Countcompwins,symbols_comp,"Computer")
+        safeDatatoMysql(Countplayerwins,symbols_player,username)
 
         print("Auf Wiedersehen")
     else: print("Falsche Eingabe")
 
-def statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp):
-    timesplayed = Countplayerwins + Countcompwins
-    print("Gespielt: " + str(timesplayed))
-    print("Spieler:  " + str(Countplayerwins) + " Percent: " + str((Countplayerwins/timesplayed)*100)+ "%")
-    print("Symbole: " + str(symbols_player))
-    print("Computer: " + str(Countcompwins) + " Percent: " + str((Countcompwins/timesplayed)*100) + "%")
-    print("Symbole: " + str(symbols_comp))
+def statistics( Countplayerwins,  symbols_player):
+    print()
+    print("Wins:  " + str(Countplayerwins))
+    print("Schere:  " + str(symbols_player[0]))
+    print("Stein:  " + str(symbols_player[1]))
+    print("Papier:  " + str(symbols_player[2]))
+    print("Echse:  " + str(symbols_player[3]))
+    print("Spock:  " + str(symbols_player[4]))
+    print("WinRate:  " + str(Countplayerwins/(symbols_player[0]+symbols_player[1]+symbols_player[2]+symbols_player[3]+symbols_player[4])*100) + "%")
+    print()
 
-def uploaddata(Countplayerwins,Countcompwins,symbols_player,symbols_comp):
-    playerstats = {"Schere": symbols_player[0], "Stein": symbols_player[1], "Papier": symbols_player[2], "Echse": symbols_player[3], "Spock": symbols_player[4], "Gewonnen": Countplayerwins}
-    compstats = {"Schere": symbols_comp[0], "Stein": symbols_comp[1], "Papier": symbols_comp[2], "Echse": symbols_comp[3], "Spock": symbols_comp[4], "Gewonnen": Countcompwins}
+def safeDatatoMysql(Wins,symbols,username):
 
-    print("Playerstats: " + str(playerstats))
-    print("Compstats: " + str(compstats))
+    username = username.lower()
 
-    changedata = str(input("Daten ändern? (y/n)"))
+    with mysql.connector.connect(host="localhost",user="root", password="admin"
+    ) as mydb:
 
-    if changedata == "y":
-        print("Welche Daten sollen geändert werden?")
-        print("1. Spieler")
-        print("2. Computer")
-        print("3. Beide")
-        whatdata = str(input())
+        mycursor = mydb.cursor()
 
-        if whatdata == "1" or whatdata == "3":
-            print("Wie viele Spiele hat der Spieler gewonnen?")
-            Countplayerwins = int(input())
-            print("Wie viele Schere hat der Spieler geworfen?")
-            symbols_player[0] = int(input())
-            print("Wie viele Stein hat der Spieler geworfen?")
-            symbols_player[1] = int(input())
-            print("Wie viele Papier hat der Spieler geworfen?")
-            symbols_player[2] = int(input())
-            print("Wie viele Echse hat der Spieler geworfen?")
-            symbols_player[3] = int(input())
-            print("Wie viele Spock hat der Spieler geworfen?")
-            symbols_player[4] = int(input())
-            print("Daten geändert")
-            if whatdata == "3":
-                print("Wie viele Spiele hat der Computer gewonnen?")
-                Countcompwins = int(input())
-                print("Wie viele Schere hat der Computer geworfen?")
-                symbols_comp[0] = int(input())
-                print("Wie viele Stein hat der Computer geworfen?")
-                symbols_comp[1] = int(input())
-                print("Wie viele Papier hat der Computer geworfen?")
-                symbols_comp[2] = int(input())
-                print("Wie viele Echse hat der Computer geworfen?")
-                symbols_comp[3] = int(input())
-                print("Wie viele Spock hat der Computer geworfen?")
-                symbols_comp[4] = int(input())
-                print("Daten geändert")
-        elif whatdata == "2":
-            print("Wie viele Spiele hat der Computer gewonnen?")
-            Countcompwins = int(input())
-            print("Wie viele Schere hat der Computer geworfen?")
-            symbols_comp[0] = int(input())
-            print("Wie viele Stein hat der Computer geworfen?")
-            symbols_comp[1] = int(input())
-            print("Wie viele Papier hat der Computer geworfen?")
-            symbols_comp[2] = int(input())
-            print("Wie viele Echse hat der Computer geworfen?")
-            symbols_comp[3] = int(input())
-            print("Wie viele Spock hat der Computer geworfen?")
-            symbols_comp[4] = int(input())
-            print("Daten geändert")
-        else: print("Falsche Eingabe")
+        mycursor.execute("CREATE DATABASE IF NOT EXISTS SWPRubner")
 
-        with open('playerstats.json', 'w') as f:
-            json.dump(playerstats, f)
-        with open('compstats.json', 'w') as f:
-            json.dump(compstats, f)
+        mycursor.execute("USE SWPRubner")
+
+        mycursor.execute("CREATE TABLE IF NOT EXISTS playerstats (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), wins INT, Schere INT, Stein INT, Papier INT, Echse INT, Spock INT)")
+
+        mycursor.execute("SELECT * FROM playerstats WHERE username = %s", (username,))
+        myresult = mycursor.fetchall()
+
+        if len(myresult) == 0:
+            mycursor.execute("Insert into playerstats (username, wins, Schere, Stein, Papier, Echse, Spock) values (%s, %s, %s, %s, %s, %s, %s)", (username, Wins, symbols[0], symbols[1], symbols[2], symbols[3], symbols[4]))
+            mydb.commit()
+        else:
+            mycursor.execute("UPDATE playerstats SET wins = %s, Schere = %s, Stein = %s, Papier = %s, Echse = %s, Spock = %s WHERE username = %s", (Wins, symbols[0], symbols[1], symbols[2], symbols[3], symbols[4], username))
+            mydb.commit()
+    
+def getDatafromMysqltoJson():
+
+     with mysql.connector.connect(host="localhost",user="root", password="admin"
+    ) as mydb:
+    
+            cur = mydb.cursor()
+            cur.execute("CREATE DATABASE IF NOT EXISTS SWPRubner")
+
+            cur.execute("USE SWPRubner")
+
+            cur.execute("CREATE TABLE IF NOT EXISTS playerstats (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), wins INT, Schere INT, Stein INT, Papier INT, Echse INT, Spock INT)")
+            cur.execute('SELECT * FROM playerstats')
+            row_headers=[x[0] for x in cur.description] #this will extract row headers
+            rv = cur.fetchall()
+            json_data=[]
+            for result in rv:
+                json_data.append(dict(zip(row_headers,result)))
+
+            with open('playerstats.json', 'w') as f:
+                json.dump(json_data, f)
+
+def getDatafromMysql(username):
+
+    username = username.lower()
+
+    with mysql.connector.connect(host="localhost",user="root", password="admin"
+    ) as mydb:
+
+        mycursor = mydb.cursor()
+
+        mycursor.execute("CREATE DATABASE IF NOT EXISTS SWPRubner")
+
+        mycursor.execute("USE SWPRubner")
+
+        mycursor.execute("CREATE TABLE IF NOT EXISTS playerstats (id INT AUTO_INCREMENT PRIMARY KEY, username VARCHAR(255), wins INT, Schere INT, Stein INT, Papier INT, Echse INT, Spock INT)")
+
+        mycursor.execute("SELECT * FROM playerstats WHERE username = %s", (username,))
+        myresult = mycursor.fetchall()
+
+        if len(myresult) == 0:
+            return "NoUser"
+        else:
+            myresult = str(myresult)
+            myresult = myresult.replace("(","")
+            myresult = myresult.replace(")","")	
+            myresult = myresult.replace("[","")
+            myresult = myresult.replace("]","")
+            myresult = myresult.split(",")
+            return myresult
 
 if __name__ == '__main__':
 
-    with open('playerstats.json', 'r') as f:
-        playerstats = json.load(f)
 
-    with open('compstats.json', 'r') as f:
-        compstats = json.load(f)
+    compstats = getDatafromMysql("Computer")
+    if compstats == "NoUser":
+        safeDatatoMysql(0,[0,0,0,0,0],"Computer")
+        compstats = getDatafromMysql("Computer")
+    playing = True
 
-    Countplayerwins = playerstats["Gewonnen"]
-    Countcompwins = compstats["Gewonnen"]
-    symbols_player = [playerstats["Schere"],playerstats["Stein"],playerstats["Papier"],playerstats["Echse"],playerstats["Spock"]]
-    symbols_comp = [compstats["Schere"],compstats["Stein"],compstats["Papier"],compstats["Echse"],compstats["Spock"]]
 
-    app = Flask(__name__)
-    @app.route('/statistic')
-    def statistic():
-        
-        return jsonify({"Player: ": playerstats, "Computer: ": compstats})
-    
+    Countplayerwins = 0
+    Countcompwins = int(compstats[2])
+
+    symbols_player = [0,0,0,0,0]
+    symbols_comp = [int(compstats[3]),int(compstats[4]),int(compstats[5]),int(compstats[6]),int(compstats[7])]
+
     print("Willkommen bei Schere Stein Papier Echse Spock")
-    print("1. Spiel starten")
-    print("2. Statistik + API")
-    print("3. Daten ändern")
-    print("4. Beenden")
-    choice = str(input())
-    if choice == "1":
-        aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,3)
-        statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
-    elif choice == "2":
-        statistics( Countplayerwins, Countcompwins, symbols_player, symbols_comp)
-        app.run()
-    elif choice == "3":
-        uploaddata(Countplayerwins,Countcompwins,symbols_player,symbols_comp)
-    elif choice == "4":
-        print("Auf Wiedersehen")
-        exit()
-    else: print("Falsche Eingabe")
+    
+    while playing:
+        
+        print("1. Spiel starten")
+        print("2. Statistik")
+        print("3. Upload Statistik")
+        print("4. Beenden")
+        choice = str(input())
+        if choice == "1":
+            username = str(input("Username: "))
+            userstats = getDatafromMysql(username)
+            if userstats == "NoUser":
+                print("User nicht gefunden")
+                if input("Möchten Sie einen neuen User erstellen? (y/n)") == "y":
+                    safeDatatoMysql(0,[0,0,0,0,0],username)
+                    aufrufen(0,Countcompwins,[0,0,0,0,0],symbols_comp,3,username)
+            else:
+                Countplayerwins = int(userstats[2])
+                symbols_player = [int(userstats[3]),int(userstats[4]),int(userstats[5]),int(userstats[6]),int(userstats[7])]
+                aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,3,username)
+        elif choice == "2":
+            username = str(input("Username: "))
+            userstats = getDatafromMysql(username)
+            if userstats == "NoUser":
+                print("User nicht gefunden")
+            else:
+                Countplayerwins = int(userstats[2])
+                symbols_player = [int(userstats[3]),int(userstats[4]),int(userstats[5]),int(userstats[6]),int(userstats[7])]
+                statistics( Countplayerwins,symbols_player)
+        elif choice == "3":
+            getDatafromMysqltoJson()
+        elif choice == "4":
+            print("Auf Wiedersehen")
+            playing = False
+        else: print("Falsche Eingabe")
+    exit()

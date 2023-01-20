@@ -1,1 +1,1 @@
-{"Schere": 20, "Stein": 7, "Papier": 8, "Echse": 10, "Spock": 8, "Gewonnen": 26}
+[{"id": 1, "username": "Computer", "wins": 7, "Schere": 3, "Stein": 2, "Papier": 1, "Echse": 1, "Spock": 4}, {"id": 2, "username": "Erik", "wins": 1, "Schere": 1, "Stein": 2, "Papier": 2, "Echse": 2, "Spock": 2}, {"id": 3, "username": "test", "wins": 1, "Schere": 1, "Stein": 0, "Papier": 0, "Echse": 0, "Spock": 1}]
