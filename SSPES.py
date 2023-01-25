@@ -1,6 +1,7 @@
 import random
 import json
 import mysql.connector
+import webbrowser
 
 def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficulty,username):
     
@@ -32,9 +33,15 @@ def aufrufen(Countplayerwins,Countcompwins,symbols_player,symbols_comp,difficult
 
     player = str(input())
 
-    if int(player) <= 4:
-        symbols_player[int(player)] += 1
-        symbols_comp[int(comp)] += 1
+    try:
+        if int(player) <= 4:
+            symbols_player[int(player)] += 1
+            symbols_comp[int(comp)] += 1
+    except ValueError as e:
+        print("Falsche Eingabe")
+        print(e)
+    except:
+        print("Falsche Eingabe")
     
 
     print("Computer: " + str(comp))
@@ -156,7 +163,6 @@ def getDatafromMysql(username):
 
 if __name__ == '__main__':
 
-
     compstats = getDatafromMysql("Computer")
     if compstats == "NoUser":
         safeDatatoMysql(0,[0,0,0,0,0],"Computer")
@@ -202,6 +208,7 @@ if __name__ == '__main__':
                 statistics( Countplayerwins,symbols_player)
         elif choice == "3":
             getDatafromMysqltoJson()
+            webbrowser.open("http://127.0.0.1:5000/statistic")
         elif choice == "4":
             print("Auf Wiedersehen")
             playing = False
