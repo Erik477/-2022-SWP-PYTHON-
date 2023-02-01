@@ -14,7 +14,7 @@ class ListElement:
 
 class EinfachVerketteteListe:
     def __init__(self):
-        self.startElem = ListElement("Kopf")
+        self.startElem = ListElement("0")
 
     def add_last(self, o):
         newElem = ListElement(o)
