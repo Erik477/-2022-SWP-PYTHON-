@@ -43,11 +43,13 @@ class EinfachVerketteteListe:
 
     def find(self, o):
         le = self.startElem
+        count = 0
         while le is not None:
             if le.get_obj() == o:
-                return True
+                return count
             le = le.nextElem
-        return False
+            count += 1
+        return -1
 
     def get_first_elem(self):
         return self.startElem
@@ -71,6 +73,16 @@ class EinfachVerketteteListe:
             count += 1
             le = le.get_next_elem()
         print(count)
+    
+    def pop(self, index):
+        le = self.startElem
+        count = 0
+        while le is not None:
+            if count == index:
+                self.delete(le.get_obj())
+                break
+            le = le.get_next_elem()
+            count += 1
 
 if __name__ == '__main__':
     list = EinfachVerketteteListe()
@@ -82,6 +94,8 @@ if __name__ == '__main__':
     list.insert_after("2", "neu")
     list.delete("3")
     list.write_list()
-    print("Lentgth:")
+    print("Length:")
     list.length()
+    print("Find:")
+    print("Found at index: " + str(list.find("neu")))
 

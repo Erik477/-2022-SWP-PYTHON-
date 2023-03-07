@@ -47,7 +47,7 @@ class DoppeltVerketteteListe:
         newElem.set_next(nextElem)
         nextElem.set_prev(newElem)
 
-    def delete(self, o):
+    def delete(self, o): # delete item with data o
         le = self.startElem
         while le.get_next() is not self.endElem and le.get_data() != o:
             if le.get_next().get_data() == o:
@@ -62,11 +62,13 @@ class DoppeltVerketteteListe:
 
     def find(self, o):
         le = self.startElem
+        count = 0
         while le is not self.endElem:
             if le.get_data() == o:
-                return True
+                return count
             le = le.get_next()
-        return False
+            count += 1
+        return -1
 
     def get_first_elem(self):
         return self.startElem
@@ -82,13 +84,38 @@ class DoppeltVerketteteListe:
         while le is not self.endElem:
             print(le.get_data())
             le = le.get_next()
+    
+    def length(self):
+        le = self.startElem
+        count = 0
+        while le is not self.endElem:
+            count += 1
+            le = le.get_next()
+        return count
+    
+    def pop(self, index): # remove item at index
+        le = self.startElem
+        count = 0
+        while le is not self.endElem:
+            if count == index:
+                if le.get_next() is not self.endElem:
+                    le.set_next(le.get_next().get_next())
+                    le.get_next().set_prev(le)
+                else:
+                    le.set_next(self.endElem)
+                    self.endElem.set_prev(le)
+                    break
+            le = le.get_next()
+            count += 1
+    
+
 
 if __name__ == '__main__':
     print("Doppelt verkettete Liste")
     list = DoppeltVerketteteListe()
     list.add_last("1")
-    list.add_last("2")
     list.add_last("3")
+    list.add_last("2")
     list.print_list()
     print("")
     list.delete("2")
@@ -96,3 +123,7 @@ if __name__ == '__main__':
     print("")
     list.insert_after("1", "neu")
     list.print_list()
+    print("")
+    print(list.find("neu"))
+    print("")
+    print(list.length())
