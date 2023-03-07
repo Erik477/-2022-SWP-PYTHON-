@@ -64,6 +64,14 @@ class EinfachVerketteteListe:
             print(le.get_obj())
             le = le.get_next_elem()
 
+    def length(self):
+        le = self.startElem
+        count = 0
+        while le is not None:
+            count += 1
+            le = le.get_next_elem()
+        print(count)
+
 if __name__ == '__main__':
     list = EinfachVerketteteListe()
     list.add_last("1")
@@ -74,4 +82,6 @@ if __name__ == '__main__':
     list.insert_after("2", "neu")
     list.delete("3")
     list.write_list()
+    print("Lentgth:")
+    list.length()
 
