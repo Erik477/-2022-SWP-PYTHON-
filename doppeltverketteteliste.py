@@ -83,7 +83,8 @@ class DoppeltVerketteteListe:
             print(le.get_data())
             le = le.get_next()
 
-if __name__ == 'main':
+if __name__ == '__main__':
+    print("Doppelt verkettete Liste")
     list = DoppeltVerketteteListe()
     list.add_last("1")
     list.add_last("2")
