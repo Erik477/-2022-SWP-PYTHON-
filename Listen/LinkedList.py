@@ -93,6 +93,7 @@ if __name__ == '__main__':
     list.add_last("5")
     list.insert_after("2", "neu")
     list.delete("3")
+    #list.pop(2)
     list.write_list()
     print("Length:")
     list.length()

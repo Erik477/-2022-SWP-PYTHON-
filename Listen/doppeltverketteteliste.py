@@ -119,6 +119,7 @@ if __name__ == '__main__':
     list.print_list()
     print("")
     list.delete("2")
+    #list.pop(1)
     list.print_list()
     print("")
     list.insert_after("1", "neu")
