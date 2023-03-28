@@ -5,7 +5,6 @@ class ListElement:
         self.next = None
         self.prev = None
 
-
     def set_next(self, next):
         self.next = next
     
@@ -113,6 +112,7 @@ class DoppeltVerketteteListe:
 if __name__ == '__main__':
     print("Doppelt verkettete Liste")
     list = DoppeltVerketteteListe()
+       
     list.add_last("1")
     list.add_last("3")
     list.add_last("2")
