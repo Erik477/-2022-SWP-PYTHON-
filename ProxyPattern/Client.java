@@ -3,11 +3,12 @@ package ProxyPattern;
 public class Client {
     public static void main (String[] args)
     {
-        InterfaceDrucker printer = new Drucker();
+        Drucker printer = new Drucker();
         try
         {
-            printer.print("Laborbericht.png","SW");
-            printer.print("Laborbericht.png","Color");
+            printer.print("Laborbericht.png");
+            printer.switchDrucker(new Color());
+            printer.print("Laborbericht.png");
         }
         catch (Exception e)
         {
